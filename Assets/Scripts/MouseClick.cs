@@ -1,30 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(HingeJoint2D))]
-
 class MouseClick : MonoBehaviour
 {
+    [SerializeField] private float _speed;
+
     private Rigidbody2D _rigidBody2D;
-    private HingeJoint2D _Connector;
-    [SerializeField] private float _speed = 2;
+    private HingeJoint2D _connector;
+    private BoxCollider2D _chain;
 
-    void Awake()
+    public GameObject othergameObject;
+
+    private void Awake()
     {
-        _rigidBody2D = gameObject.GetComponent<Rigidbody2D>();
-        _Connector = gameObject.GetComponent<HingeJoint2D>();
+        _rigidBody2D = GetComponent<Rigidbody2D>();
+        _connector = GetComponent<HingeJoint2D>();
+
     }
-    void Update()
+
+    private void Update()
     {
-        var horizontalInput = Input.GetAxisRaw("Horizontal");
-        _rigidBody2D.AddForce(new Vector2(Input.GetAxisRaw("Horizontal"), 0));
-        if (Input.GetMouseButtonDown(1)==true)
+        Swing();
+        UnHook();
+    }
+
+    private void Swing()
+    {
+        float direction = Input.GetAxis("Horizontal");
+
+        _rigidBody2D.AddForce(new Vector2(direction, 0) * _speed * Time.deltaTime);
+    }
+
+    private void UnHook()
+    {
+        if (Input.GetMouseButtonDown(0))
         {
-            _Connector.enabled = false;
-
+            _connector.enabled = false;
         }
-
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "EndOfRope")
+        {
+            
+        }
     }
 }
