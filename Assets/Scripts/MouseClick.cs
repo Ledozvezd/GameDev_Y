@@ -7,15 +7,14 @@ class MouseClick : MonoBehaviour
     [SerializeField] private float _speed;
 
     private Rigidbody2D _rigidBody2D;
-    private HingeJoint2D _connector;
+    private HingeJoint2D _joint;
     private BoxCollider2D _chain;
 
-    public GameObject othergameObject;
 
     private void Awake()
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
-        _connector = GetComponent<HingeJoint2D>();
+        _joint = GetComponent<HingeJoint2D>();
 
     }
 
@@ -36,14 +35,8 @@ class MouseClick : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            _connector.enabled = false;
-        }
-    }
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "EndOfRope")
-        {
-            
+            _joint.enabled = false;
+            _joint.connectedBody = null;
         }
     }
 }
